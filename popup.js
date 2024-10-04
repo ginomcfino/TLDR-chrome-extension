@@ -40,32 +40,22 @@ function getSelectedText() {
 }
 
 async function getSummary(text) {
-    const apiKey = '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'; // Replace with your actual API key
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
-
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                { role: 'system', content: 'You are a helpful assistant that summarizes text.' },
-                { role: 'user', content: `Please provide a concise summary of the following text:\n\n"${text}"` },
-            ],
-            max_tokens: 150,
-            temperature: 0.5,
-        }),
+    const backendUrl = 'https://us-central1-txt-summerize-chrome-extension.cloudfunctions.net/summarizeText';
+  
+    const response = await fetch(backendUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text }),
     });
-
+  
     if (!response.ok) {
-        const errorDetails = await response.text();
-        throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorDetails}`);
+      const errorDetails = await response.text();
+      throw new Error(`Backend Error: ${response.status} ${response.statusText} - ${errorDetails}`);
     }
-
+  
     const data = await response.json();
-    const summary = data.choices[0].message.content.trim();
-    return summary;
-}
+    return data.summary;
+  }
+  

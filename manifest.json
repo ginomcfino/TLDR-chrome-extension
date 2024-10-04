@@ -9,7 +9,8 @@
         "contextMenus"
     ],
     "host_permissions": [
-        "https://api.openai.com/*"
+        "https://api.openai.com/*",
+        "https://us-central1-txt-summerize-chrome-extension.cloudfunctions.net/summarizeText"
     ],
     "background": {
         "service_worker": "background.js"
